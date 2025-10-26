@@ -46,6 +46,7 @@
 #include "lorawan-config.h"
 #include "lorawan.h"
 #include "gps.h"
+#include "sensors.h"
 
 //
 // For normal use, we require that you edit the sketch to replace FILLMEIN
@@ -78,8 +79,8 @@ void os_getDevKey (u1_t* buf) {  memcpy_P(buf, APPKEY, 16);}
 
 static osjob_t sendjob;
 
-// 32 byte buffer for CayenneLPP payload
-CayenneLPP Payload(32);
+// 64 byte buffer for CayenneLPP payload
+CayenneLPP Payload(64);
 
 extern TinyGPSPlus gps;
 
@@ -183,7 +184,7 @@ void do_send(osjob_t* j){
             Serial.println(F("Requesting time"));
         } else {
             // Add GPS location to payload
-            if (gps.date.isValid() && gps.time.isValid()) {
+            if (gps.date.isValid() && gps.time.isValid() && gps.date.year() < 2080) {
                 tmElements_t tm = {
                     .Second = gps.time.second(),
                     .Minute = gps.time.minute(),
@@ -207,6 +208,14 @@ void do_send(osjob_t* j){
             if (gps.speed.isValid())
                 Payload.addDistance(0, gps.speed.kmph());
         }
+
+        update_sensors();
+        if (!isnan(sensorData.temperature))
+            Payload.addTemperature(0, sensorData.temperature);
+        if (!isnan(sensorData.pressure))
+            Payload.addBarometricPressure(0, sensorData.pressure);
+        if (!isnan(sensorData.humidity))
+            Payload.addRelativeHumidity(0, sensorData.humidity);
 
         LMIC_setTxData2(1, Payload.getBuffer(), Payload.getSize(), 0);
         Serial.println(F("Packet queued"));

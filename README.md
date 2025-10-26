@@ -2,6 +2,13 @@
 
 This is the code for a LoRaWAN-based GPS tracker using the T-Motion board from LilyGO. It uses OTAA to join The Things Network (TTN) and periodically sends GPS location data. This project is optimised for fast startup, and uses LoRaWAN's network time syncronisation to hot start the GPS module with accurate time; GPS data (e.g. last position, almanac) is also backed up every 10 minutes to further speed up GPS fixes.
 
+## Hardware
+
+- T-Motion board with GPS and LoRa (e.g. [LilyGO T-Motion](https://lilygo.cc/products/t-motion-s76g-stm32-lora))
+- Optional: BMP280 or BME280 environmental sensor for temperature, pressure, and humidity data.
+
+    The BMP280/BME280 sensor should be connected to the PB6 (SCL) and PB7 (SDA) pins on the T-Motion board. The 4 pin BMx280 boards usually line up perfectly with the 3V3, GND, SCL, and SDA pins on the T-Motion.
+
 ## Setup
 
 1. Set your region in `platformio.ini`, .e.g. `-D CFG_au915` for Australia.
@@ -20,12 +27,15 @@ This is the code for a LoRaWAN-based GPS tracker using the T-Motion board from L
     ```json
     {
         "altitude": 28.8,
+        "barometer_0": 996.3,
         "hdop": 1.2,
         "heading": 293,
+        "humidity_0": 72.5,
         "latitude": -27.4689,
         "longitude": 153.0234,
         "sats": 9,
         "speed": 0,
+        "temperature_0": 31.3,
         "time": 1761445517
       }
     ```

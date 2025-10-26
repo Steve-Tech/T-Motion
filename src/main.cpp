@@ -1,12 +1,14 @@
 #include <Arduino.h>
 
 #include "board-config.h"
+#include "sensors.h"
 #include "lorawan.h"
 #include "gps.h"
 
 void setup() {
     Serial.begin(9600);
     Serial.println("--- Startup ---");
+    setup_sensors();
     setup_gps();
     setup_lorawan();
 }
