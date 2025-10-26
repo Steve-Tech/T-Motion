@@ -1,0 +1,25 @@
+From f696981f26226b6b4593e455c420c5861fe18150 Mon Sep 17 00:00:00 2001
+From: Stephen Horvath <s.horvath@outlook.com.au>
+Date: Sun, 26 Oct 2025 12:48:53 +1000
+Subject: [PATCH] Add SX1276 version 0x13
+
+---
+ src/lmic/radio_sx127x.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/lmic/radio_sx127x.c b/src/lmic/radio_sx127x.c
+index d72da69..d54fc82 100644
+--- a/src/lmic/radio_sx127x.c
++++ b/src/lmic/radio_sx127x.c
+@@ -1109,7 +1109,7 @@ int radio_init () {
+     // some sanity checks, e.g., read version number
+     u1_t v = readReg(RegVersion);
+ #ifdef CFG_sx1276_radio
+-    if(v != 0x12 )
++    if(v != 0x12 && v != 0x13)
+         return 0;
+ #elif CFG_sx1272_radio
+     if(v != 0x22)
+-- 
+2.51.0
+
