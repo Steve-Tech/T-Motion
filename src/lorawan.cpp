@@ -86,7 +86,7 @@ extern TinyGPSPlus gps;
 
 // Schedule TX every this many seconds (might become longer due to duty
 // cycle limitations).
-const unsigned TX_INTERVAL = 30;
+const unsigned TX_INTERVAL = 60;
 
 // Pin mapping
 const lmic_pinmap lmic_pins = {
@@ -363,10 +363,12 @@ void setup_lorawan() {
     LMIC_reset();
     LMIC_setClockError(MAX_CLOCK_ERROR * 1 / 100);
 
-    // in the US/AU, with TTN, it saves join time if we start on subband 1 (channels 8-15). This
-    // will get overridden after the join by parameters from the network. If working with other
+#if defined(CFG_us915) || defined(CFG_au915)
+    // in the US/AU, TTN uses the second sub band, 1 in a zero based count. This will
+    // get overridden after the join by parameters from the network. If working with other
     // networks or in other regions, this will need to be changed.
     LMIC_selectSubBand(1);
+#endif
 
     // Start job (sending automatically starts OTAA too)
     do_send(&sendjob);

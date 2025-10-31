@@ -50,7 +50,7 @@ void setup_gps() {
     Serial.println(SERIAL_GPS.readStringUntil('\n'));
     // delay(100);
 
-    /* Auto backup */
+    /* Auto backup every 10 minutes */
     SERIAL_GPS.write("@ABPT 10\r\n");
     Serial.println(SERIAL_GPS.readStringUntil('\n'));
     SERIAL_GPS.write("@ABUP 1\r\n");
